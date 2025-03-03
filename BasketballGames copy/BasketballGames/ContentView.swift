@@ -22,25 +22,22 @@ struct Score: Codable {
 
 struct ContentView: View {
     @State private var results = [Result]()
-    
+
     var body: some View {
-        NavigationStack{
-            
-        
+        NavigationStack {
             List(results, id: \.id) { item in
                 VStack(alignment: .leading) {
-                    HStack{
-                        VStack(alignment: .leading){
+                    HStack {
+                        VStack(alignment: .leading) {
                             Text("\(item.team) vs \(item.opponent)")
                                 .font(.headline)
                             Text("Date: \(item.date)")
                         }
                         Spacer()
-                        VStack{
+                        VStack {
                             Text(" \(item.score.unc) -  \(item.score.opponent)")
                             Text(item.isHomeGame ? "Home Game" : "Away Game")
                         }
-                        
                     }
                 }
             }
@@ -50,17 +47,17 @@ struct ContentView: View {
             await loadData()
         }
     }
-    
+
     func loadData() async {
         guard let url = URL(string: "https://api.samuelshi.com/uncbasketball") else {
             print("Invalid URL")
             return
         }
-        
+
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             if let decodedResponse = try? JSONDecoder().decode([Result].self, from: data) {
-                    results = decodedResponse
+                results = decodedResponse
             }
         } catch {
             print("Invalid data")
